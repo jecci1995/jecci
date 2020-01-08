@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		{% load staticfiles %}
+        <meta charset='utf-8'>
+        <title>JSOPS</title>
+
+    </head>
+	<style type="text/css">
+	a {
+        color: #333333;
+        text-decoration: none;
+	}
+	a:hover {
+        color: #333333;
+        text-decoration: underline;
+    }
+	.divider {
+		width:100%;
+		height: 1px;
+		margin: 11px 0px;
+		overflow: hidden;
+		background: rgba(0,0,0,0.34);
+	}
+	
+	.divibody {
+		position: absolute;
+		top: 79px; left: 0;right: 0;
+		width: 100%;
+		height: 100%;
+		-border:1px dashed #000;
+		background: #fafafa;
+	}
+	.imgtwo {
+		padding-top:10px;
+		padding-left:10px;
+		-border:1px dashed #000;
+	}
+	.imgthree {
+		position: relative;
+		top: 10px;
+		-border:1px dashed #000;
+		height: 32px;
+	}
+	.div-titl {
+		position: absolute;
+		top: 0; left: 5%;
+		width: 260px;
+		height: 50px;
+		-border:1px solid #000;
+		-padding: 10px;
+		line-height: 32px;
+		text-align: center;
+		background: #fafafa;
+	}
+
+	.div-ifram {
+		position: absolute;
+		top: 13%; left: 2%;
+		width: 90%;
+		height: 530px;
+		-border:1px solid red;
+	}
+	.div-table td{
+	border:1px solid rgba(0,0,0,0.34);
+	width: 160px;
+	height: 33px;
+	}
+	.td-con:hover {
+	background: rgba(223,223,223);
+	}
+	.img-con {
+	line-height:28px;
+	}
+	</style>
+    <body>
+		<div class="divibody">
+			<div><img class="imgtwo" src="{% static "/img/list.png"%}"></div>
+			<div id="task-console-history" class="common-content">
+				<div class="div-titl">
+					<a>程序监控台</a><span> > </span>
+					<a href="/democtl_list_action">程序控制表</a><span> > </span>
+					<a title="刷新" href="/democtl_list_action" value="刷新"><img class="imgthree" src="{% static "/img/refresh.png"%}"></a>
+				</div>
+
+				<div class="divider"></div>
+				<div class="div-ifram">
+					<table class="div-table t1" style="border-collapse: collapse;" cellspacing="0" cellpadding="0" >
+						<tr>
+								<td style="width: 5%">id</td>
+								<td style="width: 22%">程序名称</td>
+								<td style="width: 8%">属性</td>
+							<!--
+								<td hidden="true" style="width: 300px">命令脚本名称</td> -->
+								<td style="width: 8%">主机IP</td>
+								<td style="width: 8%">运行端口</td>
+								<td style="width: 8%">运行状态</td>
+								<td style="width: 10%">操作</td>
+						</tr>
+						{% for res in res %}
+						<tr class="td-con" id="td-con">
+							<td style="width: 80px">{{ forloop.counter }}</td>
+							<td>{{ res.demoname }}</td>
+							<td>{{ res.demoattr }}</td>
+							<!--
+							<td hidden="true">{{ res.democmdname }}</td> -->
+							<td>{{ res.demohost }}</td>
+							<td>{{ res.demoport }}</td>
+							<td>{{ res.demostate }}</td>
+							<td>
+								<span class="democtlspan">
+
+									<form id="form_run_demo" style="float:left;" action="democtl_run_action" method="post" >
+										{% csrf_token %}
+										<input type="text" hidden="true" name="demo_id" id="demo_id1"/>
+										<input type="text" hidden="true" name="host_ip" id="host_ip1"/>
+										<buttom type="button" class="run"><img title="启动" class="img-con" src="{% static "/img/run.png"%}"></buttom>
+									</form>
+
+									<form id="form_stop_demo" style="float:left;" action="democtl_stop_action" method="post" >
+										{% csrf_token %}
+										<input type="text" hidden="true" name="demo_id" id="demo_id2"/>
+										<input type="text" hidden="true" name="host_ip" id="host_ip2"/>
+										<buttom type="button" class="stop"><img title="停止" class="img-con" src="{% static "/img/play.png"%}"></buttom>
+									</form>
+
+									<form id="form_reload_demo" style="float:left;" action="democtl_reload_action" method="post" >
+										{% csrf_token %}
+										<input type="text" hidden="true" name="demo_id" id="demo_id3"/>
+										<input type="text" hidden="true" name="host_ip" id="host_ip3"/>
+										<buttom type="button" class="reload"><img title="重启" class="img-con" src="{% static "/img/restore.png"%}"></buttom>
+									</form>
+
+									<form id="form_del_demo" action="/democtl_del_action" method="post" >
+										{% csrf_token %}
+										<input type="text" hidden="true" name="demo_id" id="demo_id4"/>
+										<buttom type="button" class="delete"><img title="删除" class="img-con" src="{% static "/img/delete.png"%}"></buttom>
+									</form>
+									</span>
+							</td>
+						</tr>
+            			{% endfor %}
+					</table>
+					<!--
+
+					-->
+				</div>
+			</div>
+		</div>
+	<script type="text/javascript" src="{% static "/js/jquery-3.4.1.js" %}"></script>
+        <script type="text/javascript">
+        document.body.innerHTML = document.body.innerHTML.replace(/未运行/ig,"<span style='color: red;'>$&</span>");
+        </script>
+	<script>
+	$(function(){
+		$(document).ready(function(){
+
+			$('.td-con').hover(function() {
+				$(".democtlspan").css('display', 'block');
+			}, function() {
+			   $(".democtlspan").css('display', 'none');
+			});
+
+			$( ".run" ).click( function() {
+			var form = document.getElementById('form_run_demo');
+			var demo_id = document.getElementById('demo_id1');
+			var host_ip = document.getElementById('host_ip1');
+			var td = $( $( this ).parent().parent().parent().parent() ).find( "td" );
+			var del_id = td.eq(1 ).html();
+			var del_hosts_id = td.eq(3 ).html();
+			alert ("run" + del_id + del_hosts_id );
+			demo_id.value = del_id;
+			host_ip.value = del_hosts_id;
+			form.submit();
+			return true;
+			});
+
+			$( ".stop" ).click( function() {
+			var form = document.getElementById('form_stop_demo');
+			var demo_id = document.getElementById('demo_id2');
+			var host_ip = document.getElementById('host_ip2');
+			var td = $( $( this ).parent().parent().parent().parent() ).find( "td" );
+			var del_id = td.eq(1 ).html();
+			var del_hosts_id = td.eq(3 ).html();
+			alert ("stop" + del_id + del_hosts_id );
+			demo_id.value = del_id;
+			host_ip.value = del_hosts_id;
+			form.submit();
+			return true;
+			});
+
+			$( ".reload" ).click( function() {
+			var form = document.getElementById('form_reload_demo');
+			var demo_id = document.getElementById('demo_id3');
+			var host_ip = document.getElementById('host_ip3');
+			var td = $( $( this ).parent().parent().parent().parent() ).find( "td" );
+			var del_id = td.eq(1 ).html();
+			var del_hosts_id = td.eq(3 ).html();
+			alert ("reload" + del_id + del_hosts_id );
+			demo_id.value = del_id;
+			host_ip.value = del_hosts_id;
+			form.submit();
+			return true;
+			});
+
+			$( ".delete" ).click( function() {
+			var form = document.getElementById('form_del_demo');
+			var demo_id = document.getElementById('demo_id4');
+			var td = $( $( this ).parent().parent().parent().parent() ).find( "td" );
+			var del_id = td.eq(1 ).html();
+			alert ("delete" + del_id);
+			demo_id.value = del_id;
+			form.submit();
+			return true;
+			});
+
+		})
+  	})
+		</script>
+	{% if messages %}
+	<script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+       </script>
+	{% endif %}
+    </body>
+
+</html>

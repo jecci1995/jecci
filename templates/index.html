@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		{% load staticfiles %}
+        <meta charset='utf-8'>
+        <title>JSOPS</title>
+		<link href="{% static "/css/istyles.css" %}" rel="stylesheet">
+    </head>
+    <body>
+
+
+	<div class="div-top">
+		<div class="web-font-div">
+            <i class="web-font">JSOPS</i>
+            <button class="webdr"><img style="display: inline-block; vertical-align: -14%;" src="{% static "/img/user.png"%}">   {{user.username}}</button>
+        </div>
+	</div>
+	<div class="div-body">
+		<div class="div-left">
+				<div  class="dis-b">
+					<div class="imgone"><img style="display: inline-block; vertical-align: middle;" src="{% static "/img/international.png"%}"></div>
+					<div class="fonone"><a href='index.html'>首页</a></div>
+				</div>
+				
+				<div class="divider"></div>
+				<div class="dis-b">
+					<div class="imgone"><img style="display: inline-block; vertical-align: middle;" src="{% static "/img/sub_account.png"%}"></div>
+					<div class="fonone user"><a>用户管理</a></div>
+				</div>
+				<div class="dis-n user-console-list"><a>用户列表</a></div>
+				<div class="dis-n user-console-add"><a>添加用户</a></div>
+				<div class="dis-b">
+					<div class="imgone"><img style="display: inline-block; vertical-align: middle;" src="{% static "/img/order.png"%}"></div>
+					<div class="fonone task"><a>任务管理</a></div>
+				</div>
+				<div class="dis-n task-console-add"><a>添加任务</a></div>
+				<div class="dis-n task-console-list"><a >任务列表</a></div>
+				<div class="dis-n task-console-con"><a>任务控制</a></div>
+				<div class="dis-b">
+					<div class="imgone"><img style="display: inline-block; vertical-align: middle;" src="{% static "/img/record.png" %}"></div>
+					<div class="fonone check"><a>巡检管理</a></div>
+				</div>
+				<div class="dis-n check-console-add"><a>巡检任务列表</a></div>
+				<div class="dis-n check-console-list"><a>巡检历史列表</a></div>
+				<div class="dis-b">
+					<div class="imgone"><img style="display: inline-block; vertical-align: middle;" src="{% static "/img/filter.png" %}"></div>
+					<div class="fonone democtl"><a>程序监控台</a></div>
+				</div>
+				<div class="dis-n democtl_list"><a>程序控制表</a></div>
+				<div class="dis-n democtl_history"><a>程序状态表</a></div>
+				<div class="dis-n democtl_add"><a>添加程序</a></div>
+				<div class="dis-b">
+					<div class="imgone"><img style="display: inline-block; vertical-align: middle;" src="{% static "/img/setting.png" %}"></div>
+					<div class="fonone"><a>系统设置</a></div>
+				</div>
+				<div class="dis-b">
+					<div class="fonone"><a>功能开发中 ......</a></div>
+				</div>
+		</div>
+		<iframe style="display:none" class="ifr ifr" id="mainContent" width="100%" height="100%" ></iframe>
+		<iframe style="display:none" class="ifr ifr1" id="mainContent1" width="100%" height="100%" ></iframe>
+		<iframe style="display:none" class="ifr ifr2" id="mainContent2" width="100%" height="100%" ></iframe>
+		<iframe style="display:none" class="ifr ifr3" id="mainContent3" width="100%" height="100%" ></iframe>
+		<iframe style="display:none" class="ifr ifr11" id="mainContent11" width="100%" height="100%" ></iframe>
+		<iframe style="display:none" class="ifr ifr12" id="mainContent12" width="100%" height="100%" ></iframe>
+		<iframe style="display:none" class="ifr ifrctl_list" id="mainContentctl_list" width="100%" height="100%" ></iframe>
+		<iframe style="display:none" class="ifr ifrctl_history" id="mainContentctl_history" width="100%" height="100%" ></iframe>
+		<iframe style="display:none" class="ifr ifrctl_add" id="mainContentctl_add" width="100%" height="100%" ></iframe>
+
+	</div>
+	
+	
+	<script type="text/javascript" src="{% static "/js/jquery-3.4.1.js" %}"></script>
+	<script>
+		$(function(){
+			$('.user').on('click' , function(){
+				$(".user-console-list").slideToggle();
+				$(".user-console-add").slideToggle();
+			});
+			$('.task').on('click' , function(){
+				$(".task-console-add").slideToggle();
+				$(".task-console-list").slideToggle();
+				$(".task-console-con").slideToggle();
+			});
+			$('.check').on('click' , function(){
+				$(".check-console-add").slideToggle();
+				$(".check-console-list").slideToggle();
+			});
+			$('.democtl').on('click' , function(){
+				$(".democtl_list").slideToggle();
+				$(".democtl_history").slideToggle();
+				$(".democtl_add").slideToggle();
+			});
+
+			$('.task-console-list').on('click' , function(){
+				closeAll();
+				$(".ifr1").show();
+			});
+			$('.task-console-add').on('click' , function(){
+				closeAll();
+				$(".ifr2").show();
+			});
+			$('.task-console-con').on('click' , function(){
+				closeAll();
+				$(".ifr3").show();
+			});
+
+			$('.user-console-list').on('click' , function(){
+				closeAll();
+				$(".ifr11").show();
+			});
+			$('.user-console-add').on('click' , function(){
+				closeAll();
+				$(".ifr12").show();
+			});
+			$('.democtl_list').on('click' , function(){
+				closeAll();
+				$(".ifrctl_list").show();
+			});
+			$('.democtl_history').on('click' , function(){
+				closeAll();
+				$(".ifrctl_history").show();
+			});
+			$('.democtl_add').on('click' , function(){
+				closeAll();
+				$(".ifrctl_add").show();
+			});
+			
+			function closeAll(){
+				$(".ifr").hide();
+				$("#div-bg").hide();
+			}
+		})
+		var mainContent = document.getElementById('mainContent');
+		var mainContent1 = document.getElementById('mainContent1');
+		var mainContent2 = document.getElementById('mainContent2');
+		var mainContent3 = document.getElementById('mainContent3');
+		var mainContent11 = document.getElementById('mainContent11');
+		var mainContent12 = document.getElementById('mainContent12');
+		var mainContentctl_list = document.getElementById('mainContentctl_list');
+		var mainContentctl_history = document.getElementById('mainContentctl_history');
+		var mainContentctl_add = document.getElementById('mainContentctl_add');
+		mainContent.src = "http://192.168.3.69:8000/index-body.html";
+ 	   	mainContent1.src = "http://192.168.3.69:8000/task-console-list.html";
+    		mainContent2.src = "http://192.168.3.69:8000/task-console-add.html";
+	    	mainContent3.src = "http://192.168.3.69:8000/task-console-con.html";
+    		mainContent11.src = "http://192.168.3.69:8000/user-console-list.html";
+	    	mainContent12.src = "http://192.168.3.69:8000/user-console-add.html";
+    		mainContentctl_list.src = "http://192.168.3.69:8000/demo-console.html";
+	    	mainContentctl_history.src = "http://192.168.3.69:8000/demo-console-history.html";
+    		mainContentctl_add.src = "http://192.168.3.69:8000/demo-console-add.html";
+
+		/*这里是提交表单前的非空校验*/
+    $("form").submit(function () {
+        var tnum = $("input[name='tnum']").val();
+        var tjob = $("input[name='tjob']").val();
+		var tgit = $("input[name='tgit']").val();
+
+        if (tnum == "" || tnum == null || tnum == undefined) {
+            alert("设定任务编号为空!");
+            return false;/*阻止表单提交*/
+        } else if (tjob == "" || tjob == null || tjob == undefined) {
+            alert("要发布的项目名称为空!");
+            return false;/*阻止表单提交*/
+        } else if (tgit == "" || tgit == null || tgit == undefined) {
+            alert("要发布的git分支号为空!");
+            return false;/*阻止表单提交*/
+        } 
+		else {
+            alert("提交中......");
+            return true;
+        }
+    })
+	</script>
+
+    {% if messages %}
+	<script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+       </script>
+	{% endif %}
+    </body>
+
+</html>

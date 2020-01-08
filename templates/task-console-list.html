@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		{% load staticfiles %}
+        <meta charset='utf-8'>
+        <title>JSOPS</title>
+
+    </head>
+	<style type="text/css">
+	a {
+        color: #333333;
+        text-decoration: none;
+	}
+	a:hover {
+        color: #333333;
+        text-decoration: underline;
+    }
+	.divider {
+		width:100%;
+		height: 1px;
+		margin: 11px 0px;
+		overflow: hidden;
+		background: rgba(0,0,0,0.34);
+	}
+	
+	.divibody {
+		position: absolute;
+		top: 79px; left: 0;right: 0;
+		width: 100%;
+		height: 100%;
+		-border:1px dashed #000;
+		background: #fafafa;
+	}
+	.imgtwo {
+		padding-top:10px;
+		padding-left:10px;
+		-border:1px dashed #000;
+	}
+	.imgthree {
+		position: relative;
+		top: 10px;
+		-border:1px dashed #000;
+		height: 32px;
+	}
+	.div-titl {
+		position: absolute;
+		top: 0; left: 5%;
+		width: 260px;
+		height: 50px;
+		-border:1px solid #000;
+		-padding: 10px;
+		line-height: 32px;
+		text-align: center;
+		background: #fafafa;
+	}
+
+	.div-ifram {
+		position: absolute;
+		top: 13%; left: 4%;
+		width: 88%;
+		height: 530px;
+		-border:1px solid red;
+	}
+	.div-table td{
+	border:1px solid rgba(0,0,0,0.34);
+	width: 160px;
+	height: 33px;
+	}
+	.td-con:hover {
+	background: rgba(223,223,223);
+	}
+	.img-con {
+	line-height:28px;
+	}
+	</style>
+    <body>
+		<div class="divibody">
+			<div><img class="imgtwo" src="{% static "/img/list.png"%}"></div>
+			<div id="task-console-history" class="common-content">
+				<div class="div-titl">
+					<a>任务管理</a><span> > </span>
+					<a href="/task_table_action">任务列表</a><span> > </span>
+					<a title="刷新" href="/task_table_action" value="刷新"><img class="imgthree" src="{% static "/img/refresh.png"%}"></a>
+				</div>
+
+				<div class="divider"></div>
+				<div class="div-ifram">
+					<table class="div-table" style="border-collapse: collapse;" cellspacing="0" cellpadding="0" >
+						<tr>
+								<td style="width: 80px">id</td>
+								<td>任务编号</td>
+								<td>项目名称</td>
+								<td>Git分支</td>
+								<td>操作</td>
+						</tr>
+						{% for res in res %}
+						<tr class="td-con" id="td-con">
+							<td style="width: 80px">{{ forloop.counter }}</td>
+							<td>{{ res.tnum }}</td>
+							<td>{{ res.tjob }}</td>
+							<td>{{ res.tgit }}</td>
+							<td>
+								<form id="t_form" class="t_form" style="display:none" action="/task_del_action" method="post" >
+									{% csrf_token %}
+									<img title="编辑" class="img-con c1" src="{% static "/img/edit2.png"%}">
+									<input type="text" hidden="true" name="task_id" id="task_id"/>
+									<buttom type="button" class="c2"><img title="删除" class="img-con" src="{% static "/img/delete.png"%}"></buttom>
+								</form>
+							</td>
+						</tr>
+            			{% endfor %}
+					</table>
+				</div>
+			</div>
+		</div>
+	
+	
+	<script type="text/javascript" src="{% static "/js/jquery-3.4.1.js" %}"></script>
+	<script>
+	$(function(){
+		$(document).ready(function(){
+			$('.td-con').hover(function() {
+				$(".t_form").css('display', 'block');
+			}, function() {
+			   $(".t_form").css('display', 'none');
+			});
+
+			$( ".c2" ).click( function() {
+			var form = document.getElementById('t_form');
+			var task_id = document.getElementById('task_id');
+			var td = $( $( this ).parent().parent().parent() ).find( "td" );
+			var del_id = td.eq(1 ).html();
+			alert (del_id);
+			task_id.value = del_id;
+			form.submit();
+			return true;
+			});
+		})
+
+
+  	})
+		</script>
+	{% if messages %}
+	<script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+       </script>
+	{% endif %}
+    </body>
+
+</html>

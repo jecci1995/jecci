@@ -1,0 +1,40 @@
+import os
+import telnetlib
+from configparser import ConfigParser
+from TestModel.models import Democtl
+
+class ConfigUtils(object):
+    def __init__(self, fileName):
+        super(ConfigUtils, self).__init__()
+        #try:
+        self.config = ConfigParser()
+        self.config.read(fileName)
+#if __name__ == '__main__':
+
+
+def socron():
+    state_run = '运行中'
+    state_stop = '已停止'
+    section_list = ['redis368','test']
+    for section in section_list:
+        cfg = ConfigUtils('/python/helloworld/helloworld/section_list.cfg').config
+        DemoName = cfg.get(section, 'DemoName')
+        HostIP = cfg.get(section, 'HostIP')
+        DemoPort = cfg.get(section, 'DemoPort')
+        try:
+            tel = telnetlib.Telnet(HostIP, port=DemoPort, timeout=5)
+            tel.close()
+            writeTodb( DemoName, HostIP, DemoPort, state_run)
+        except:
+            writeTodb(DemoName, HostIP, DemoPort, state_stop)
+def writeTodb(DemoName, HostIP, DemoPort, status):
+    print(DemoName, HostIP, DemoPort, status)
+    changedb = Democtl.objects.get(demoname=DemoName,demohost=HostIP,demoport=DemoPort)
+    changedb.demostate = status
+    changedb.save()
+    response = ""
+    list = Democtl.objects.all()
+    for var in list:
+        response += var.demoname + ";" + var.demohost + ";" +var.demoport
+    print(response)
+

@@ -1,0 +1,33 @@
+import os
+import telnetlib
+from TestModel.models import Democtl
+
+def socron():
+    response = []
+    list = Democtl.objects.all()
+    for var in list:
+        res = {}
+        res['demoname']=var.demoname
+        res['demohost']=var.demohost
+        res['demoport']=var.demoport
+        response.append(res)
+    state_run = '运行中'
+    state_stop = '未运行'
+    section_list = response
+    for sc in section_list:
+        DemoName = sc['demoname']
+        HostIP = sc['demohost']
+        DemoPort = sc['demoport']
+        try:
+            tel = telnetlib.Telnet(HostIP, port=DemoPort, timeout=5)
+            tel.close()
+            writeTodb( DemoName, HostIP, DemoPort, state_run)
+        except:
+            writeTodb(DemoName, HostIP, DemoPort, state_stop)
+def writeTodb(DemoName, HostIP, DemoPort, status):
+    print(DemoName, HostIP, DemoPort, status)
+    changedb = Democtl.objects.get(demoname=DemoName,demohost=HostIP,demoport=DemoPort)
+    changedb.demostate = status
+    changedb.save()
+
+

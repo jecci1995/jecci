@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>JSOPS</title>
+    </head>
+	<style type="text/css">
+	a {
+        color: #333333;
+        text-decoration: none;
+	}
+	a:hover {
+        color: #333333;
+        text-decoration: underline;
+    }
+	.divider {
+		width:100%;
+		height: 1px;
+		margin: 11px 0px;
+		overflow: hidden;
+		background: rgba(0,0,0,0.34);
+	}
+	
+	.divibody {
+		position: absolute;
+		top: 79px; left: 0;right: 0;
+		width: 100%;
+		height: 100%;
+		-border:1px dashed #000;
+		background: #fafafa;
+	}
+	.imgtwo {
+		padding-top:10px;
+		padding-left:10px;
+		-border:1px dashed #000;
+	}
+	.imgthree {
+		position: relative;
+		top: 10px;
+		-border:1px dashed #000;
+		height: 32px;
+	}
+	.div-titl {
+		position: absolute;
+		top: 0; left: 5%;
+		width: 245px;
+		height: 50px;
+		-border:1px solid #000;
+		-padding: 10px;
+		line-height: 50px;
+		text-align: center;
+		background: #fafafa;
+	}
+
+	.div-ifram {
+		position: absolute;
+		top: 13%; left: 6%;
+		width: 88%;
+		height: 530px;
+		-border:1px solid red;
+	}
+
+	.t-form-i {
+		width:240px;
+		height:20px;
+		-border:1px solid #000;
+	}
+	.t-form-b {
+		width:240px;
+		height:150px;
+	}
+	.t-form {
+		padding-top: 1.5%;
+		padding-left: 5%;
+		-border:1px solid #000;
+	}
+	.t-form span {
+	    float: left;
+		width: 160px;
+		text-align: right;
+		line-height: 20px;
+		-border:1px solid #000;
+	}
+	.t-form-t {
+		position: relative;
+		top: 35%; left: 18.2%;
+		width:240px;
+		height:30px;
+	}
+
+	</style>
+    <body>
+	{% load staticfiles %}
+		<div class="divibody">
+			<div><img class="imgtwo" src="{% static "/img/list.png"%}"></div>
+			<div id="task-console-history" class="common-content">
+				<div class="div-titl">
+					<a>程序控制台</a><span> > </span>
+					<a>添加程序</a>
+					</div>
+
+				<div class="divider"></div>
+				<div class="div-ifram">
+					<form class="t-form" action="/demo_form_action" method="post">
+						{% csrf_token %}
+						<span>程序名称: </span><input class="t-form-i" type="text" name="demoname" id="demoname"/></p>
+						<input hidden="true" value="测试服" class="t-form-i" type="text" name="demoattr" id="demoattr"/></p>
+						<input hidden="true" value="undefine"class="t-form-i" type="text" name="democmdname" id="democmdname"/></p>
+						<span>主机IP: </span><input class="t-form-i" type="text" name="demohost" id="demohost"/></p>
+						<span>运行端口: </span><input class="t-form-i" type="text" name="demoport" id="demoport"/></p>
+						<input hidden="true" value="运行中" class="t-form-i" type="text" name="demostate" id="demostate"/></p>
+						<span>添加到：</span><select class="t-form-i" type="text" name="clist">
+							<option value="1">程序控制表</option>
+							<option value="2">程序状态表</option>
+						</select>
+
+</p>
+						<br/>
+						<input class="t-form-t" type="submit" value="提交" />
+					</form>
+				</div>
+			</div>
+		</div>
+	
+	
+	<script type="text/javascript" src="{% static "/js/jquery-3.4.1.js" %}"></script>
+	<script>
+		/*这里是提交表单前的非空校验*/
+    $("form").submit(function () {
+        var demoname = $("input[name='demoname']").val();
+        var demoattr = $("input[name='demoattr']").val();
+		var democmdname = $("input[name='democmdname']").val();
+		var demohost = $("input[name='demohost']").val();
+		var demoport = $("input[name='demoport']").val();
+		var demostate = $("input[name='demostate']").val();
+
+        if (demoname == "" || demoname == null || demoname == undefined) {
+            alert("程序名称为空!");
+            return false;/*阻止表单提交*/
+        } else if (demoattr == "" || demoattr == null || demoattr == undefined) {
+            alert("demoattr为空!");
+            return false;/*阻止表单提交*/
+        } else if (democmdname == "" || democmdname == null || democmdname == undefined) {
+            alert("命令脚本名称为空!");
+            return false;/*阻止表单提交*/
+        } else if (demohost == "" || demohost == null || demohost == undefined) {
+            alert("主机IP为空!");
+            return false;/*阻止表单提交*/
+        } else if (demoport == "" || demoport == null || demoport == undefined) {
+            alert("运行端口为空!");
+            return false;/*阻止表单提交*/
+        } else if (demostate == "" || demostate == null || demostate == undefined) {
+            alert("demostate为空!");
+            return false;/*阻止表单提交*/
+        }
+
+		else {
+            alert("提交中......");
+            return true;
+        }
+    })
+    </script>
+    {% if messages %}
+	<script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+       </script>
+	{% endif %}
+    </body>
+
+</html>

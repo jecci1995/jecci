@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .divibody {
+		position: absolute;
+		top: 100px; left: 0;
+		width: 100%;
+		height: 100%;
+		-border:1px dashed #000;
+		background: #fafafa;
+	}
+        .imgtwo {
+		padding-top:10px;
+		padding-left:10px;
+		-border:1px dashed #000;
+	}
+        .div-ifram {
+		position: absolute;
+		top: 35%; left: 35%;
+		width: 150px;
+		height: 200px;
+		-border:1px solid red;
+	}
+    </style>
+</head>
+<body>
+        {% load staticfiles %}
+		<div class="divibody">
+			<div><img class="imgtwo" src="{% static "/img/list.png"%}"></div>
+
+			<div class="div-ifram"><img src="{% static "/img/customer_service.png" %}"><p><h3>你准备好了吗？</h3></p></div>
+		</div>
+</body>
+</html>
